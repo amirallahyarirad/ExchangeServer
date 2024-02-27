@@ -1,0 +1,80 @@
+#Connect to Server with PS 
+Enter-PSSession SERVER
+
+#Exchange 2013, 2016, 2019 Add-PSSnapin to bring the cmdlets into PowerShell ISE 
+Add-PSSnapin Microsoft.Exchange.Management.PowerShell.SnapIn; 
+
+#Set custom DNS to NICs 
+Get-NetworkConnectionInfo 
+Set-FrontendTransportService -Identity MAIL1 -InternalDNSAdapterGuid 1f5eba12-fa2f-4fe6-91a1-36e5cf79e2f7 
+Set-FrontendTransportService -Identity MAIL1 -ExternalDNSAdapterGuid 1f5eba12-fa2f-4fe6-91a1-36e5cf79e2f7 
+Get-FrontEndTransportService | Format-List *DNS* 
+
+#Create Mailbox Database 
+New-MailboxDatabase -Server MB1 -Name "EDB1" -EdbFilePath D:\EDB1\EDB1.edb -LogFolderPath E:\EDB1 
+
+#Get Mailbox Database and Recipients to empty and remove DB 
+Set-ADServerSettings -ViewEntireForest $true 
+Get-MailboxDatabase
+Get-Mailbox -Database "DB01" -Archive 
+Get-Mailbox -Database "DB01" -PublicFolder 
+Get-Mailbox -Database "DB01" -Arbitration 
+Get-Mailbox -Database "DB01" -AuditLog 
+Get-Mailbox -Database "DB01" -AuditLog 
+Get-Mailbox -Database "DB01" -Monitoring | Format-Table Name, DisplayName, Database, Servername 
+Get-Mailbox -AuditLog | Format-Table Name, ServerName, Database, AdminDisplayVersion 
+Get-Mailbox -Database "DB01" -Monitoring | Disable-Mailbox -Confirm:$false 
+Get-Mailbox -Database "DB01" -Monitoring | Disable-Mailbox -Confirm:$true 
+
+#Create User Mailbox 
+New-Mailbox -UserPrincipalName a.rad@tavana.net -Alias a.rad -Name "Amir Rad" 
+
+#Enable User Mailbox 
+Enable-Mailbox -Identity "Name" 
+Enable-Mailbox -Identity "Name" -Archive 
+
+#Move 
+Get-Mailbox -Database "Mailbox Database" -AuditLog | New-MoveRequest -TargetDatabase "EDB02" 
+Get-MoveRequest -SourceDatabase "Mailbox Database 1185487867" 
+Get-MoveRequest -TargetDatabase "DB02" 
+Get-MoveRequest | Get-MoveRequestStatistics 
+Get-Mailbox -AuditLog | New-MoveRequest -TargetDatabase "DB01" 
+
+#To remove a move request 
+Remove-MoveRequest 
+SystemMailbox{8cc370d3-822a-4ab8-a926-bb94bd0641a9} 
+Set-ADServerSettings -ViewEntireForest $true; Get-Mailbox -AuditLog | Remove-Mailbox -AuditLog -Confirm:$false 
+Set-ADServerSettings -ViewEntireForest $true; Get-Mailbox -AuditLog 
+
+#For importing PST into User Mailbox 
+New-MailboxImportRequest -FilePath \\mail1\PST\marketing.pst -Mailbox "marketing" 
+Get-MailboxImportRequest 
+Get-MailboxImportRequest -Mailbox "ceo" | Format-List Name,FilePath,Mailbox,Status 
+Get-MailboxImportRequest -Status Completed | Remove-MailboxImportRequest 
+Get-MailboxImportRequest -Status Failed | Remove-MailboxImportRequest 
+Get-MailboxExportRequest -Status Completed | Remove-MailboxExportRequest 
+Remove-MailboxImportRequest  
+Set-Mailbox amir@skyroom.ir -ForwardingSmtpAddress amir.rad@outlook.com -DeliverToMailboxAndForward $True 
+
+#Queue 
+Get-Queue 
+Get-QueueDigest 
+
+#Diagnostic 
+Test-MAPIConnectivity 
+Test-Mailflow 
+
+#Recreate virtual directory 
+#OWA: 
+Get-OwaVirtualDirectory 
+Remove-OwaVirtualDirectory “server\owa (Default Web Site)” 
+New-OwaVirtualDirectory  -InternalUrl “https://server1.domain.com/owa” -ExternalUrl “https://server1.domain.com/owa” 
+
+#ECP 
+Remove-EcpVirtualDirectory -Identity “mail1\ecp (Default Web Site)” 
+New-EcpVirtualDirectory  -InternalUrl “https://server1.domain.com/ecp” -ExternalUrl  “https://server1.domain.com/ecp” 
+Test-ServiceHealth MSExchangeEdgeSync 
+
+#DAG
+New-DatabaseAvailabilityGroup -Name DAG1 -WitnessServer DC01 -WitnessDirectory C:\DAG1 -DatabaseAvailabilityGroupIpAddresses 0.0.0.0 
+Add-DatabaseAvailabilityGroupServer -Identity DAG1 -MailboxServer MB1  
