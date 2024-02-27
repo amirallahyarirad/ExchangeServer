@@ -1,0 +1,56 @@
+101	Invalid SSL or TLS configuration	
+111	Error connecting with the remote SMTP server	
+221	Domain service closing transmission channel	
+250	Requested mail action completed and OK	
+420	Recipient's firewall/filter blocking mail	
+421	Domain service not available, closing transmission channel	
+422	The recipient has exceeded their mailbox limit	
+431	Insufficient storage or out-of-memory issues	
+432	Domain service not available, closing transmission channel	
+441	Intermittent network connection, the server has not yet responded	
+442	The server started to deliver the message but then the connection was broken	
+446	Too many hops. Most likely, the message is looping	
+447	Timeout occurred, check server connection	
+449	A DNS problem occurred; check your smart host setting on the SMTP connector	
+450	Requested mail action not taken: mailbox unavailable. request refused	
+451	Requested action aborted: local error in processing Request is unable to be processed, try again	
+452	Requested action not taken: insufficient system storage	
+453	No mail	
+454	TLS not available due to temporary reason. Encryption required for requested authentication mechanism	
+455	Recipient's SMTP server cannot interpret parameters associated with the "MAIL FROM" or "RCPT TO" commands.	
+458	Unable to queue messages for node	
+459	Node not allowed: reason	
+471	Anti-spam filter or firewall prevented message from sending	
+500	Syntax error, command unrecognized	
+501	Syntax error in parameters or arguments	
+502	Command not implemented	
+503	Bad sequence of commands	
+504	Command parameter not implemented	
+510	Check the recipient address	
+511	Mailbox not found	
+512	Domain can not be found. Unknown host.	
+513	Relaying denied or Address type incorrect	
+515	Destination mailbox address invalid	
+517	Problem with senders mail attribute, check properties	
+521	Domain does not accept mail	
+522	Recipient has exceeded mailbox limit	
+523	Server limit exceeded. Message too large	
+530	Access Denied. Authentication required	
+531	Mail system Full	
+533	Remote server has insufficient disk space to hold email	
+534	Authentication mechanism is too weak. Message too big	
+535	Multiple servers using same IP. Required Authentication	
+538	Encryption required for requested authentication mechanism	
+540	Email address has no DNS Server	
+541	No response from host	
+542	Bad Connection	
+543	Routing server failure. No available route	
+546	Email looping	
+547	Delivery time-out	
+550	Requested action not taken: mailbox unavailable	
+551	User not local; please try forward path	
+552	Requested mail action aborted: exceeded storage allocation	
+553	Requested action not taken: mailbox name not allowed	
+554	Transaction failed	
+555	Wrong protocol version	
+556	Email sent is too large for the recipient's email server to process
